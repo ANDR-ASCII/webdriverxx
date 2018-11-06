@@ -19,24 +19,20 @@ file(GLOB_RECURSE AppHeadersList "include/*.h")
 list(REMOVE_ITEM AppSourcesList src/stdafx.cpp)
 
 add_msvc_precompiled_header("stdafx.h" "src/stdafx.cpp" AppSourcesList)
-
 source_group("Precompiled Headers" FILES include/stdafx.h src/stdafx.cpp)
 
-if(WIN32)
-	source_group(WinResource FILES ${AppWin32Resoure})
-endif()
-
 configure_msvc_runtime()
-	add_executable(
-		${AppName} 
-		${AppSourcesList}
-		${AppHeadersList}
-		${AppFormsList} 
-		${AppResourcesList}
-		${AppFormsHeadersList}
-		${AppHeadersMocList}
-		${AppResourcesListAdded}
-	)
+
+add_executable(
+	${AppName} 
+	${AppSourcesList}
+	${AppHeadersList}
+	${AppFormsList} 
+	${AppResourcesList}
+	${AppFormsHeadersList}
+	${AppHeadersMocList}
+	${AppResourcesListAdded}
+)
 
 if(MSVC)
 	add_definitions(
@@ -57,7 +53,7 @@ if(MSVC)
 	
 	set_target_properties(
 		${AppName} 
-		PROPERTIES WIN32_EXECUTABLE YES
+		PROPERTIES
 		LINK_FLAGS "/DEBUG /ENTRY:mainCRTStartup /MAP"
 	)
 endif()
@@ -71,7 +67,7 @@ externalproject_add(picojson_project
 	BUILD_COMMAND ""
 	INSTALL_COMMAND ""
 	UPDATE_COMMAND ""
-	)
+)
 	
 externalproject_get_property(picojson_project source_dir)
 include_directories("${source_dir}")
@@ -84,8 +80,7 @@ externalproject_add(curl_project
 	CMAKE_ARGS -DCURL_STATICLIB=ON -DBUILD_SHARED_LIBS=OFF -DBUILD_CURL_EXE=OFF -DBUILD_CURL_TESTS=OFF -DCMAKE_USE_OPENSSL=OFF -DCURL_ZLIB=OFF -DHTTP_ONLY=ON
 	INSTALL_COMMAND ""
 	UPDATE_COMMAND ""
-	TIMEOUT 3
-	)
+)
 
 externalproject_get_property(curl_project source_dir binary_dir)
 include_directories("${source_dir}/include")
@@ -93,7 +88,6 @@ link_directories("${binary_dir}/lib")
 list(APPEND LIBS libcurl wsock32 ws2_32)
 list(APPEND DEPS curl_project)
 add_definitions(-DCURL_STATICLIB)
-
 
 include_directories(
 	${AppHeadersDir}

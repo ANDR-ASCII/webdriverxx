@@ -3,9 +3,17 @@
 
 int main()
 {
-	webdriverxx::WebDriver chrome = webdriverxx::Start(webdriverxx::Chrome());
-	chrome.Navigate("http://google.com")
-		.FindElement(webdriverxx::ByCss("input[name=q]"))
-		.SendKeys("Hello, world!")
-		.Submit();
+	try
+	{
+		webdriverxx::WebDriver chrome = webdriverxx::Start(webdriverxx::Chrome());
+
+		const webdriverxx::Session& session = chrome.Navigate("https://rivesolutions.com");
+		std::cout << session.GetTitle() << std::endl;
+	}
+	catch (const std::exception& exception)
+	{
+		std::cout << exception.what();
+	}
+
+	std::cin.get();
 }
